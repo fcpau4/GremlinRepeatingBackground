@@ -6,13 +6,13 @@ public class DropletPool : MonoBehaviour {
 
     public int dropletPoolSize;
     public GameObject dropletPrefab;
-    public float spawnRate =3f;
+    public float spawnRate;
 
-    public float dropletMinY = -1f;
-    public float dropletMaxY = 3.5f;
+    public float dropletMinY;
+    public float dropletMaxY;
 
-    public float dropletMinX = 5f;
-    public float dropletMaxX = 10f;
+    public float dropletMinX;
+    public float dropletMaxX;
 
     private GameObject[] droplets; 
     private Vector2 objectPoolPosition = new Vector2(-15f, -25f);

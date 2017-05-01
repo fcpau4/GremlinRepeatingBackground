@@ -10,9 +10,9 @@ public class RayDamage : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        else
+        else if(coll.gameObject.tag=="Droplet")
         {
-            Destroy(gameObject);
+            Physics2D.IgnoreCollision(coll.gameObject.GetComponent<PolygonCollider2D>(), this.GetComponent<BoxCollider2D>());
         }
 
     }

@@ -6,10 +6,11 @@ public class Gremlin : MonoBehaviour
 
     public float moveSpeed;
     public float jumpHeight;
+    public float jumpPower;
     public bool IsRunning;
     public static Gremlin player;
     public LayerMask groundLayer;
-
+    public PolygonCollider2D coll2d;
     private Rigidbody2D rb2d;
     private Animator anim;
     
@@ -23,12 +24,15 @@ public class Gremlin : MonoBehaviour
         player = this;
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll2d = GetComponent<PolygonCollider2D>();
     }
 
 
 
     void Update()
     {
+
+
         if (!HealthManager.IsDead)
         {
             //Jump.
@@ -66,7 +70,10 @@ public class Gremlin : MonoBehaviour
 
     void Jump()
     {
-        rb2d.velocity = new Vector2(rb2d.velocity.x, jumpHeight);
+        if (coll2d.bounds.max.y < jumpHeight)
+        {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, jumpPower);
+        }
     }
 
 
