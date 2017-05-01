@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6bec43234df0aa540a82a36a230896a5
+timeCreated: 1493577421
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - dropletPrefab: {fileID: 1990279672013730, guid: c348682460abcde45aaa5fdab9b00365,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

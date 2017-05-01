@@ -1,74 +1,96 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Gremlin : MonoBehaviour {
+
+public class Gremlin : MonoBehaviour
+{
 
     public float moveSpeed;
     public float jumpHeight;
-
-    public LayerMask layerMaskForGrounded;
-    public float isGroundedRayLength = 0.1f;
+    public bool IsRunning;
+    public static Gremlin player;
+    public LayerMask groundLayer;
 
     private Rigidbody2D rb2d;
     private Animator anim;
+    
 
 
 
-	// Use this for initialization
-	void Start () {
 
+    // Use this for initialization
+    void Start()
+    {
+        player = this;
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-	}
-	
+    }
 
 
-	void Update()
+
+    void Update()
     {
-        //Jump.
-        if (Input.GetKey(KeyCode.Space))
+        if (!HealthManager.IsDead)
         {
-            rb2d.velocity = new Vector2(0, jumpHeight);
+            //Jump.
+            if (Input.GetKey(KeyCode.Space) && IsGrounded())
+            {
+                Jump();
+            }
+
+
+
+            //Walk.
+            if (Input.GetKey(KeyCode.D) && IsGrounded())
+            {
+                rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
+                IsRunning = true;
+            }
+
+            //Stop Walkling
+            if (Input.GetKeyUp(KeyCode.D) || !IsGrounded())
+            {
+                IsRunning = false;
+            }
+
+            anim.SetBool("IsRunning", IsRunning);
+
         }
-
-        //Walk to the Right.
-        if (Input.GetKey(KeyCode.D))
+        else
         {
-            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-
+            anim.SetTrigger("Dead");
         }
+       
+    }
 
-        //Walk to the Left.
-        if (Input.GetKey(KeyCode.A))
+
+
+    void Jump()
+    {
+        rb2d.velocity = new Vector2(rb2d.velocity.x, jumpHeight);
+    }
+
+
+    bool IsGrounded()
+    {
+        Vector2 position = transform.position;
+        Vector2 direction = Vector2.down;
+        float distance = 2.0f;
+
+        Debug.DrawRay(position, direction, Color.green);
+        RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
+
+        if (hit.collider != null)
         {
-            rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.x);
-        }
-
-
-        if (isGrounded())
-        {
-            anim.SetFloat("velocity", rb2d.velocity.x);
+            Debug.Log("Grounded");
+            return true;
         }else
         {
-            anim.SetBool("grounded", isGrounded());
+            Debug.Log("Air");
+            return false;
         }
-
     }
 
-    public bool isGrounded()
-    {
-      
-            Vector2 currentPosition = transform.position;
-            currentPosition.y = GetComponent<Collider2D>().bounds.min.y + 0.1f;
-
-            float lengthRay = isGroundedRayLength + 2f;
-
-            Debug.DrawRay(currentPosition, Vector3.down * lengthRay, Color.green);
-            bool grounded = Physics2D.Raycast(currentPosition, Vector2.down, isGroundedRayLength, 1 << LayerMask.NameToLayer("Ground"));
-
-            return grounded;
-        
-    }
 
 }
+		
+       
